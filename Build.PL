@@ -21,7 +21,7 @@ my $build = Module::Build->new(
 
 	'build_requires'	=> {
 		# for serverquery.t
-		'Storable'	=> 0,
+		'Storable'	=> '2.18',	# force latest so it can read the data...
 		'MIME::Base64'	=> 0,
 	},
 

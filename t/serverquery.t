@@ -15,11 +15,11 @@ BEGIN {
 	}
 
 	# setup our reply datagrams
-	# We store it via encode_base64( freeze( [ $datagram ] ) );
+	# We store it via encode_base64( nfreeze( [ $datagram ] ), '' );
 	@replies = (
 		{
 			name	=> 'nobody on the server',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABc2AQCAaAQAAAoADDJUZWFtIERlYXRobWF0Y2ggIzk5IAwxQ1NOICM5OQwzIGJzMC43LjEAGAAA',
+			data	=> 'BQcCAAAAARc2AQCAaAQAAAoADDJUZWFtIERlYXRobWF0Y2ggIzk5IAwxQ1NOICM5OQwzIGJzMC43LjEAGAAA',
 			attrs	=> {
 				'map'		=> '',
 				players		=> 0,
@@ -35,7 +35,7 @@ BEGIN {
 		},
 		{
 			name	=> 'full server',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABdFAQCAaAQAFANhcG9sbG9fZGVzZXJ0Y2l0eQAMMlRlYW0gRGVhdGhtYXRjaCAjMiAMMUNTTiAjNAwzIGJzMC43LjEAFAAA',
+			data	=> 'BQcCAAAAARdFAQCAaAQAFANhcG9sbG9fZGVzZXJ0Y2l0eQAMMlRlYW0gRGVhdGhtYXRjaCAjMiAMMUNTTiAjNAwzIGJzMC43LjEAFAAA',
 			attrs	=> {
 				'map'		=> 'apollo_desertcity',
 				players		=> 20,
@@ -51,7 +51,7 @@ BEGIN {
 		},
 		{
 			name	=> 'not full server',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABcwAQCAaAQFDAthY19kZXBvdAAMMkZsYWdzIAwxQ1NOICMyNQwzIGJzMC43LjEAHAAA',
+			data	=> 'BQcCAAAAARcwAQCAaAQFDAthY19kZXBvdAAMMkZsYWdzIAwxQ1NOICMyNQwzIGJzMC43LjEAHAAA',
 			attrs	=> {
 				'map'		=> 'ac_depot',
 				players		=> 12,
@@ -67,7 +67,7 @@ BEGIN {
 		},
 		{
 			name	=> 'retrieving playerlist',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABdAAQGAaAQAAQ9hY19hcmN0aWMADDJNYXRjaCAjMSAMMUNTTiAjMzAMMyBiczAuNy4xAAoAAVB1bmhldGVpcm8AAA==',
+			data	=> 'BQcCAAAAARdAAQGAaAQAAQ9hY19hcmN0aWMADDJNYXRjaCAjMSAMMUNTTiAjMzAMMyBiczAuNy4xAAoAAVB1bmhldGVpcm8AAA==',
 			attrs	=> {
 				'map'		=> 'ac_arctic',
 				players		=> 1,
@@ -85,7 +85,7 @@ BEGIN {
 		},
 		{
 			name	=> 'bigger playerlist',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABdfAQGAaAQKAwRhY19hcmN0aWMADDJUT1NPSyAmIE9TT0sgIzIgDDFDU04gIzI2DDMgYnMwLjcuMQAMAAFLaXN0aXppW0hVTl0AUmFpbihCRSlbSkJmcl0AcGFjbyEhAAA=',
+			data	=> 'BQcCAAAAARdfAQGAaAQKAwRhY19hcmN0aWMADDJUT1NPSyAmIE9TT0sgIzIgDDFDU04gIzI2DDMgYnMwLjcuMQAMAAFLaXN0aXppW0hVTl0AUmFpbihCRSlbSkJmcl0AcGFjbyEhAAA=',
 			attrs	=> {
 				'map'		=> 'ac_arctic',
 				players		=> 3,
@@ -105,7 +105,7 @@ BEGIN {
 		},
 		{
 			name	=> 'biggest playerlist',
-			data	=> 'BAcEMTIzNAQEBAgCAQAAABfdAQGAaAQFFAlhcG9sbG9fZGVzZXJ0Y2l0eQAMMkN1c3RvbU1hcHMgQ1RGIAwxQ1NOICMxNgwzIGJzMC43LjEAFAABTFAAZHVkdTE1NwBEZW5pelR1a2V5AFpFVVMAYWxleGFuZHJlAGFwZmVsbXVzAFRpVGkwNjEzMABPbW1hAFIAfGFDS2F8R2hvc3QqAEtVWlVCT1laAE1vcmV6AGRqZWplAEktTUFHSUMtSQBMdWZmeVtGUl0AU3RlaW5lcgBqdW5pb3IAZDBuZQBNT0haRU0AY3JvcXVldHRlAAA=',
+			data	=> 'BQcCAAAAARfdAQGAaAQFFAlhcG9sbG9fZGVzZXJ0Y2l0eQAMMkN1c3RvbU1hcHMgQ1RGIAwxQ1NOICMxNgwzIGJzMC43LjEAFAABTFAAZHVkdTE1NwBEZW5pelR1a2V5AFpFVVMAYWxleGFuZHJlAGFwZmVsbXVzAFRpVGkwNjEzMABPbW1hAFIAfGFDS2F8R2hvc3QqAEtVWlVCT1laAE1vcmV6AGRqZWplAEktTUFHSUMtSQBMdWZmeVtGUl0AU3RlaW5lcgBqdW5pb3IAZDBuZQBNT0haRU0AY3JvcXVldHRlAAA=',
 			attrs	=> {
 				'map'		=> 'apollo_desertcity',
 				players		=> 20,
