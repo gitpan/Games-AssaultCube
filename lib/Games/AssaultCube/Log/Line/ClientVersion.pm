@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -30,11 +30,24 @@ has 'defs' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Client from " . $self->ip . " connected with version " . $self->version;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords defs ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::ClientVersion - Describes the ClientVersion event in a log line

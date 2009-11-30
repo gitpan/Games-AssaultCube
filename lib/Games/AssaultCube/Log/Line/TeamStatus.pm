@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -31,11 +31,23 @@ has 'flags' => (
 	is		=> 'ro',
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Team Status for " . $self->team_name . ": " . $self->players . " players, " . $self->frags . " frags" . ( defined $self->flags ? ", " . $self->flags . " flags" : "" );
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords CLA RVSF admin configfile frags gamemode
 =head1 NAME
 
 Games::AssaultCube::Log::Line::TeamStatus - Describes the TeamStatus event in a log line

@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 use strict; use warnings;
 
+# import our helper modules
+use Games::AssaultCube::MasterserverQuery;
+use HTTP::Response;
+
 my( $numtests, @replies );
 BEGIN {
 	$numtests = 0;
@@ -142,10 +146,6 @@ END
 }
 
 use Test::More tests => $numtests;
-
-# import our helper modules
-use Games::AssaultCube::MasterserverQuery;
-use HTTP::Response;
 
 # setup our "fake" server object
 my $query = Games::AssaultCube::MasterserverQuery->new();

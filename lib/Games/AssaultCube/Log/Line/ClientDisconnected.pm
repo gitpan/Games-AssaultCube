@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -26,11 +26,24 @@ has 'forced' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Client " . $self->nick . " disconnected (" . $self->reason . ")";
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::ClientDisconnected - Describes the ClientDisconnected event in a log line

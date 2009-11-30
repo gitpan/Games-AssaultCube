@@ -4,7 +4,7 @@ use Moose::Role;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Games::AssaultCube::Utils qw( get_team_from_name get_team_name );
 
@@ -38,6 +38,8 @@ sub BUILD {
 
 1;
 __END__
+
+=for stopwords CLA RVSF
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Base::TeamInfo - The TeamInfo role for subclasses

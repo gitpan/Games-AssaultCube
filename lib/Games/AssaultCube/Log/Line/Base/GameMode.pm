@@ -4,7 +4,7 @@ use Moose::Role;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Games::AssaultCube::Utils qw( get_gamemode_from_name get_gamemode_from_fullname get_gamemode_name get_gamemode_fullname );
 
@@ -54,6 +54,8 @@ sub BUILD {
 
 1;
 __END__
+
+=for stopwords CTF TDM gamemode
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Base::GameMode - The GameMode role for subclasses

@@ -7,7 +7,7 @@ use MooseX::StrictConstructor;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # get some utility stuff
 use Games::AssaultCube::Utils qw( parse_masterserverresponse );
@@ -42,6 +42,20 @@ has 'response' => (
 	required	=> 1,
 );
 
+has 'tohash' => (
+	isa		=> 'HashRef',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		my $data = {
+			masterserver	=> $self->masterserver,
+			servers		=> [ map { { ip => $_->{ip}, port => $_->{port} } } @{ $self->servers } ],
+		};
+		return $data;
+	},
+);
+
 sub BUILDARGS {
 	my $class = shift;
 
@@ -64,6 +78,9 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords masterserver tohash URI hashrefs ip
+
 =head1 NAME
 
 Games::AssaultCube::MasterserverQuery::Response - Holds the various data from a MasterserverQuery response
@@ -106,11 +123,15 @@ The hashref contains the following keys: ip and port
 
 =head3 num_servers
 
-A convenience method returning the number of servers in the list
+A convenience accessor returning the number of servers in the list
 
 =head3 response
 
 The HTTP::Response object in case you wanted to poke around
+
+=head3 tohash
+
+A convenience accessor returning "vital" data in a hashref for easy usage
 
 =head1 AUTHOR
 

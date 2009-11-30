@@ -40,6 +40,10 @@ SUPPORT
 
         <http://search.cpan.org/dist/Games-AssaultCube>
 
+    *   CPAN Testing Service
+
+        <http://cpants.perl.org/dist/overview/Games-AssaultCube>
+
   Bugs
     Please report any bugs or feature requests to "bug-games-assaultcube at
     rt.cpan.org", or through the web interface at

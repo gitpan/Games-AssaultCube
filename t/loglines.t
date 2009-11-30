@@ -2,6 +2,7 @@
 use strict; use warnings;
 
 # Import some helper routines
+use Games::AssaultCube::Log::Line;
 use Games::AssaultCube::Utils qw( get_role_from_name get_team_from_name get_gamemode_from_name get_gamemode_from_fullname get_mastermode_name get_mastermode_from_name );
 use DateTime;
 
@@ -765,9 +766,6 @@ BEGIN {
 	}
 }
 
-# Start by loading the base log stuff
-use Games::AssaultCube::Log::Line;
-
 # setup our test suite
 use Test::More tests => $numtests;
 
@@ -823,7 +821,7 @@ sub test_line {
 	# Make sure we have no "unexpected" attributes present in the object
 	my $found = 0;
 	foreach my $attr ( keys %{ $log->meta->get_attribute_map } ) {
-		if ( ! exists $data->{'attrs'}->{ $attr } ) {
+		if ( ! exists $data->{'attrs'}->{ $attr } and $attr ne 'tostr' ) {
 			fail( "Unknown attribute - $attr" );
 			$found++;
 			last;

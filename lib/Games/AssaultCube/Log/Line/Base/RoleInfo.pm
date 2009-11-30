@@ -4,7 +4,7 @@ use Moose::Role;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Games::AssaultCube::Utils qw( get_role_from_name get_role_name );
 
@@ -40,6 +40,8 @@ sub BUILD {
 
 1;
 __END__
+
+=for stopwords ADMIN
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Base::RoleInfo - The RoleInfo role for subclasses

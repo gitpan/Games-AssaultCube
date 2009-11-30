@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -28,6 +28,16 @@ has 'pick' => (
 	isa		=> 'Int',
 	is		=> 'ro',
 	required	=> 1,
+);
+
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Autobalance: forcing " . $self->pick . " to the other team based on target " . $self->target;
+	},
 );
 
 no Moose;

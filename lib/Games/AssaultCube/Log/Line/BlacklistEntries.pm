@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::AdminPasswords';
 
@@ -18,11 +18,23 @@ has 'count_secondary' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Loaded " . $self->count . " blacklist entries ( " . $self->count_secondary . " secondary ) from " . $self->config;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords configfile
 =head1 NAME
 
 Games::AssaultCube::Log::Line::BlacklistEntries - Describes the BlacklistEntries event in a log line

@@ -6,15 +6,28 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::FlagStole';
+
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return $self->nick . " was forced to pick up the flag";
+	},
+);
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::FlagForcedPickup - Describes the FlagForcedPickup event in a log line

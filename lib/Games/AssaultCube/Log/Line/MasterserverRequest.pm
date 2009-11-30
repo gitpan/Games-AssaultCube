@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -18,11 +18,23 @@ has 'server' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Sending request to Masterserver " . $self->server;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords masterserver
 =head1 NAME
 
 Games::AssaultCube::Log::Line::MasterserverRequest - Describes the MasterserverRequest event in a log line

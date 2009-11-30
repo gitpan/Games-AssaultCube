@@ -6,17 +6,29 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
 with	'Games::AssaultCube::Log::Line::Base::TeamInfo';
+
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "The server reset the " . $self->team_name . " flag";
+	},
+);
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords CLA RVSF
 =head1 NAME
 
 Games::AssaultCube::Log::Line::FlagReset - Describes the FlagReset event in a log line

@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -54,11 +54,24 @@ has 'score' => (
 	},
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return $self->nick . ( $self->gib ? " gibbed " : " killed " ) . ( $self->tk ? "teammate " : "" ) . $self->victim;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords gamemode gib gibbed tk ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Killed - Describes the Killed event in a log line

@@ -7,7 +7,7 @@ use MooseX::StrictConstructor;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # get some utility stuff
 use Games::AssaultCube::MasterserverQuery::Response;
@@ -85,6 +85,9 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords masterserver CubeStats.net HTTP URI XML hostname ip useragent
+
 =head1 NAME
 
 Games::AssaultCube::MasterserverQuery - Queries an AssaultCube masterserver for the list of servers
@@ -144,7 +147,7 @@ The LWP::UserAgent object we will use. Handy if you want to override it's config
 
 Currently, there is only one method: run(). You call this and get the response object back. For more
 information please look at the L<Games::AssaultCube::MasterserverQuery::Response> class. You can call run() as
-many times as you want, no need to re-instantitate the object for each query.
+many times as you want, no need to re-instantiate the object for each query.
 
 WARNING: run() will die() if errors happen. For sanity, you should wrap it in an eval.
 

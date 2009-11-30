@@ -4,10 +4,13 @@ use strict; use warnings;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 1;
 __END__
+
+=for stopwords AnnoCPAN CPAN RT
+
 =head1 NAME
 
 Games::AssaultCube - The AssaultCube perl libraries
@@ -55,6 +58,10 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-AssaultCube>
 =item * Search CPAN
 
 L<http://search.cpan.org/dist/Games-AssaultCube>
+
+=item * CPAN Testing Service
+
+L<http://cpants.perl.org/dist/overview/Games-AssaultCube>
 
 =back
 

@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -37,11 +37,24 @@ has 'failure_reason' => (
 	is		=> 'ro',
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return $self->nick . " called a vote: " . $self->type . " to: " . $self->target . ( $self->failure ? " FAILED(" . $self->failure_reason . ")" : "" );
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords mapname playername ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::CallVote - Describes the CallVote event in a log line

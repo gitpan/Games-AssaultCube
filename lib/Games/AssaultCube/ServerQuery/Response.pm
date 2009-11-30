@@ -7,7 +7,7 @@ use MooseX::StrictConstructor;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # get some utility stuff
 use Games::AssaultCube::Utils qw( parse_pingresponse default_port getpongflag stripcolors );
@@ -129,18 +129,61 @@ has 'datagram' => (
 	required	=> 1,
 );
 
+has 'tohash' => (
+	isa		=> 'HashRef',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		my $data = {};
+
+		foreach my $attr ( qw( timestamp gamemode server port pingtime protocol players minutes_left map desc max_players ) ) {
+			$data->{ $attr } = $self->$attr();
+		}
+
+		# extra data
+		if ( scalar @{ $self->player_list } ) {
+			$data->{player_list} = [ @{ $self->player_list } ];
+		} else {
+			$data->{player_list} = [];
+		}
+
+		return $data;
+	},
+);
+
+has 'timestamp' => (
+	isa		=> 'Int',
+	is		=> 'ro',
+	default		=> sub {
+		scalar time();
+	},
+);
+
 sub BUILDARGS {
 	my $class = shift;
 
 	# Normally, we would be created by Games::AssaultCube::ServerQuery and contain 2 args
-	if ( @_ == 2 && ref $_[0] && $_[0]->isa( 'Games::AssaultCube::ServerQuery' ) ) {
-		# call the parse method
-		return {
-			server		=> $_[0]->server,
-			port		=> $_[0]->port,
-			datagram	=> $_[1],
-			%{ parse_pingresponse( $_[1] ) },
-		};
+	if ( @_ == 2 && ref $_[0] ) {
+		if ( ref( $_[0] ) eq 'Games::AssaultCube::ServerQuery' ) {
+			# call the parse method
+			return {
+				server		=> $_[0]->server,
+				port		=> $_[0]->port,
+				datagram	=> $_[1],
+				%{ parse_pingresponse( $_[1] ) },
+			};
+		} elsif ( ref( $_[0] ) eq 'POE::Component::AssaultCube::ServerQuery' ) {
+			# parse it a bit differently
+			return {
+				server		=> $_[1]->{addr},
+				port		=> $_[1]->{port},
+				datagram	=> $_[1]->{payload}->[0],
+				%{ parse_pingresponse( $_[1]->{payload}->[0] ) },
+			};
+		} else {
+			die "unknown arguments";
+		}
 	} else {
 		return $class->SUPER::BUILDARGS(@_);
 	}
@@ -152,6 +195,9 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords CTF TDM desc gamemode pingtime pingmode pongflag pongflags tohash pong timestamp
+
 =head1 NAME
 
 Games::AssaultCube::ServerQuery::Response - Holds the various data from a ServerQuery response
@@ -267,6 +313,14 @@ Returns a boolean value whether the server is full or not
 =head3 datagram
 
 The actual packet we received from the server
+
+=head3 tohash
+
+A convenience accessor returning "vital" data in a hashref for easy usage
+
+=head3 timestamp
+
+The UNIX timestamp when this response object was generated
 
 =head1 AUTHOR
 

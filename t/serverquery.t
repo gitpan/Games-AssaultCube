@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 use strict; use warnings;
 
+# import our helper modules
+use MIME::Base64 qw( decode_base64 );
+use Games::AssaultCube::ServerQuery;
 use Games::AssaultCube::Utils qw( get_gamemode_from_name );
 
 my( $numtests, @replies );
@@ -147,44 +150,45 @@ BEGIN {
 
 use Test::More tests => $numtests;
 
-# import our helper modules
-use MIME::Base64 qw( decode_base64 );
-use Storable qw( thaw );
-use Games::AssaultCube::ServerQuery;
-
 # setup our "fake" server object
 my $query = Games::AssaultCube::ServerQuery->new( 'localhost' );
 
-# recreate the datagram!
-foreach my $test ( @replies ) {
-	# recover the datagram...
-	my $datagram = thaw( decode_base64( $test->{'data'} ) );
-	$datagram = $datagram->[0];
+SKIP: {
+	# skip all tests if we don't have latest Storable
+	eval "use Storable 2.18";
+	skip "Storable v2.18+ not installed", scalar @replies * 14 if $@;
 
-	# actually parse it
-	my $response;
-	eval {
-		$response = Games::AssaultCube::ServerQuery::Response->new( $query, $datagram );
-	};
-	is( ! $@, 1, "Parsed '" . $test->{'name'} . "' with no errors" );
-	diag( $@ ) if $@;
+	# recreate the datagram!
+	foreach my $test ( @replies ) {
+		# recover the datagram...
+		my $datagram = Storable::thaw( decode_base64( $test->{'data'} ) );
+		$datagram = $datagram->[0];
 
-	# some basic sanity tests
-	$test->{'attrs'}->{'server'} = 'localhost';
-	$test->{'attrs'}->{'port'} = 28763;
-	$test->{'attrs'}->{'datagram'} = $datagram;
+		# actually parse it
+		my $response;
+		eval {
+			$response = Games::AssaultCube::ServerQuery::Response->new( $query, $datagram );
+		};
+		is( ! $@, 1, "Parsed '" . $test->{'name'} . "' with no errors" );
+		diag( $@ ) if $@;
 
-	# test the result data!
-	foreach my $attr ( sort keys %{ $test->{'attrs'} } ) {
-		# what type of attr?
-		if ( defined $test->{'attrs'}->{ $attr } ) {
-			if ( ! ref( $test->{'attrs'}->{ $attr } ) ) {
-				cmp_ok( $response->$attr(), 'eq', $test->{'attrs'}->{ $attr }, "Testing attribute($attr)" );
+		# some basic sanity tests
+		$test->{'attrs'}->{'server'} = 'localhost';
+		$test->{'attrs'}->{'port'} = 28763;
+		$test->{'attrs'}->{'datagram'} = $datagram;
+
+		# test the result data!
+		foreach my $attr ( sort keys %{ $test->{'attrs'} } ) {
+			# what type of attr?
+			if ( defined $test->{'attrs'}->{ $attr } ) {
+				if ( ! ref( $test->{'attrs'}->{ $attr } ) ) {
+					cmp_ok( $response->$attr(), 'eq', $test->{'attrs'}->{ $attr }, "Testing attribute($attr)" );
+				} else {
+					is_deeply( $response->$attr(), $test->{'attrs'}->{ $attr }, "Testing datastruct attribute($attr)" );
+				}
 			} else {
-				is_deeply( $response->$attr(), $test->{'attrs'}->{ $attr }, "Testing datastruct attribute($attr)" );
+				is( ! defined $response->$attr(), 1, "Testing undef attribute($attr)" );
 			}
-		} else {
-			is( ! defined $response->$attr(), 1, "Testing undef attribute($attr)" );
 		}
 	}
 }

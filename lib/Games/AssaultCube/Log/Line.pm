@@ -4,7 +4,7 @@ use strict; use warnings;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # the factory constructor
 sub new {
@@ -504,6 +504,8 @@ sub parse {
 
 1;
 __END__
+
+=for stopwords Torsten Raudssus
 =head1 NAME
 
 Games::AssaultCube::Log::Line - Parses an AssaultCube server log line
@@ -562,7 +564,7 @@ an object, the "parse()" method will be called on it; otherwise the coderef will
 The subclass can either return undef or a defined result. If it returns undef then we will continue with the
 normal code. If it was defined, then it will be returned directly to the caller, bypassing the parsing
 code. That way your subclass can return anything, from an object to a hashref to a simple "1". The implication
-of this is that your subclass will be called every time this class is instantitated. The arguments is simply
+of this is that your subclass will be called every time this class is instantiated. The arguments is simply
 the line to be parsed, just like the constructor of this class. From there your subclass can use the
 L<Games::AssaultCube::Log::Line::Base> object if desired for it's events or anything else.
 

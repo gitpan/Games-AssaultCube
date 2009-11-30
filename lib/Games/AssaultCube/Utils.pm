@@ -4,16 +4,69 @@ use strict; use warnings;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # set ourself up for exporting
 use base qw( Exporter );
-our @EXPORT_OK = qw( default_port stripcolors tostr getpongflag
+our @EXPORT_OK = qw( default_port stripcolors htmlcolors tostr getpongflag get_ac_pingport
 	getint getstring parse_pingresponse parse_masterserverresponse
 	get_gamemode get_gamemode_name get_gamemode_from_name get_gamemode_fullname get_gamemode_from_fullname
 	get_team_from_name get_team_name get_role_from_name get_role_name
 	get_mastermode_from_name get_mastermode_name get_gun_from_name get_gun_name
+	get_disconnect_reason_name get_disconnect_reason_from_name
 );
+
+sub get_ac_pingport {
+	my $port = shift;
+	return if ! defined $port;
+
+	# from protocol.h
+	# #define CUBE_SERVINFO_PORT(serverport) (serverport+1)
+	return $port + 1;
+}
+
+{
+	# from protocol.h
+	# enum { DISC_NONE = 0, DISC_EOP, DISC_CN, DISC_MKICK, DISC_MBAN, DISC_TAGT, DISC_BANREFUSE, DISC_WRONGPW, DISC_SOPLOGINFAIL, DISC_MAXCLIENTS, DISC_MASTERMODE, DISC_AUTOKICK, DISC_AUTOBAN, DISC_DUP, DISC_NUM };
+	# static const char *disc_reasons[] = { "normal", "end of packet", "client num", "kicked by server operator", "banned by server operator", "tag type", "connection refused due to ban", "wrong password", "failed admin login", "server FULL - maxclients", "server mastermode is \"private\"", "auto kick - did your score drop below the threshold?", "auto ban - did your score drop below the threshold?", "duplicate connection" };
+	my %reason_name = (
+		0	=> 'normal',
+		1	=> 'end of packet',
+		2	=> 'client num',
+		3	=> 'kicked by server operator',
+		4	=> 'banned by server operator',
+		5	=> 'tag type',
+		6	=> 'connection refused due to ban',
+		7	=> 'wrong password',
+		8	=> 'failed admin login',
+		9	=> 'server FULL - maxclients',
+		10	=> 'server mastermode is "private"',
+		11	=> 'auto kick - did your score drop below the threshold?',
+		12	=> 'auto ban - did your score drop below the threshold?',
+		13	=> 'duplicate connection',
+	);
+	my %name_reason = map { $reason_name{ $_ } => $_ } keys %reason_name;
+
+	sub get_disconnect_reason_name {
+		my $reason = shift;
+		return unless defined $reason;
+		if ( exists $reason_name{ $reason } ) {
+			return $reason_name{ $reason };
+		} else {
+			return;
+		}
+	}
+
+	sub get_disconnect_reason_from_name {
+		my $reason = lc( shift );
+		return unless defined $reason;
+		if ( exists $name_reason{ $reason } ) {
+			return $name_reason{ $reason };
+		} else {
+			return;
+		}
+	}
+}
 
 sub get_gamemode {
 	my $m = shift;
@@ -45,6 +98,7 @@ sub get_gamemode {
 
 	sub get_gun_from_name {
 		my $gun = uc( shift );
+		return unless defined $gun;
 		if ( exists $name_gun{ $gun } ) {
 			return $name_gun{ $gun };
 		} else {
@@ -54,6 +108,7 @@ sub get_gamemode {
 
 	sub get_gun_name {
 		my $gun = shift;
+		return unless defined $gun;
 		if ( exists $gun_name{ $gun } ) {
 			return $gun_name{ $gun };
 		} else {
@@ -75,6 +130,7 @@ sub get_gamemode {
 
 	sub get_team_from_name {
 		my $team = uc( shift );
+		return unless defined $team;
 		if ( exists $name_team{ $team } ) {
 			return $name_team{ $team };
 		} else {
@@ -84,6 +140,7 @@ sub get_gamemode {
 
 	sub get_team_name {
 		my $team = shift;
+		return unless defined $team;
 		if ( exists $team_name{ $team } ) {
 			return $team_name{ $team };
 		} else {
@@ -103,6 +160,7 @@ sub get_gamemode {
 
 	sub get_role_from_name {
 		my $role = uc( shift );
+		return unless defined $role;
 		if ( exists $name_role{ $role } ) {
 			return $name_role{ $role };
 		} else {
@@ -112,6 +170,7 @@ sub get_gamemode {
 
 	sub get_role_name {
 		my $role = shift;
+		return unless defined $role;
 		if ( exists $role_name{ $role } ) {
 			return $role_name{ $role };
 		} else {
@@ -132,6 +191,7 @@ sub get_gamemode {
 
 	sub get_mastermode_from_name {
 		my $mode = uc( shift );
+		return unless defined $mode;
 		if ( exists $name_mode{ $mode } ) {
 			return $name_mode{ $mode };
 		} else {
@@ -141,6 +201,7 @@ sub get_gamemode {
 
 	sub get_mastermode_name {
 		my $mode = shift;
+		return unless defined $mode;
 		if ( exists $mode_name{ $mode } ) {
 			return $mode_name{ $mode };
 		} else {
@@ -302,6 +363,7 @@ sub getstring {
 
 	sub get_gamemode_fullname {
 		my $m = shift;
+		return unless defined $m;
 		if ( exists $mode_name{ $m } ) {
 			return $mode_name{ $m };
 		} else {
@@ -311,6 +373,7 @@ sub getstring {
 
 	sub get_gamemode_from_fullname {
 		my $m = lc( shift );
+		return unless defined $m;
 		if ( exists $name_mode{ $m } ) {
 			return $name_mode{ $m };
 		} else {
@@ -351,6 +414,7 @@ sub getstring {
 
 	sub get_gamemode_name {
 		my $m = shift;
+		return unless defined $m;
 		if ( exists $mode_name{ $m } ) {
 			return $mode_name{ $m };
 		} else {
@@ -360,6 +424,7 @@ sub getstring {
 
 	sub get_gamemode_from_name {
 		my $m = uc( shift );
+		return unless defined $m;
 		if ( exists $name_mode{ $m } ) {
 			return $name_mode{ $m };
 		} else {
@@ -428,20 +493,77 @@ sub stripcolors {
 
 	my $output = '';
 	my $foundcolor = 0;
-	for ( my $i = 0; $i < length( $str ); $i++ ) {
-		my $c = ord( substr( $str, $i, 1 ) );
-
+	foreach my $c ( split( //, $str ) ) {
 		if ( $foundcolor ) {
 			# skip the damn thing
 			$foundcolor = 0;
-		} elsif ( $c == 12 ) {
+		} elsif ( ord( $c ) == 12 ) {
 			$foundcolor++
 		} else {
-			$output .= substr( $str, $i, 1 );
+			$output .= $c;
 		}
 	}
 
 	return $output;
+}
+
+{
+	# From AC docs/colouredtext.txt
+	# also, look at the PHP code for reference :)
+#	$html_colors = array(
+#		"<span style='color: #00ee00'>",
+#		"<span style='color: #0000ee'>",
+#		"<span style='color: #f7de12'>",
+#		"<span style='color: #ee0000'>",
+#		"<span style='color: #767676'>",
+#		"<span style='color: #eeeeee'>",
+#		"<span style='color: #824f03'>",
+#		"<span style='color: #9a0000'>"
+#	);
+
+	my %htmlcolors = (
+		0	=> '<font color="#00ee00">',
+		1	=> '<font color="#0000ee">',
+		2	=> '<font color="#f7de12">',
+		3	=> '<font color="#ee0000">',
+		4	=> '<font color="#767676">',
+		5	=> '<font color="#eeeeee">',
+		6	=> '<font color="#824f03">',
+		7	=> '<font color="#9a0000">',
+	);
+
+	sub htmlcolors {
+		my $str = shift;
+
+		my $found = 0;
+		my $incolor = 0;
+		my $ret = '';
+		my @chars = split( //, $str );
+		foreach my $i ( 0 .. $#chars ) {
+			if ( $found ) {
+				if ( exists $htmlcolors{ $chars[$i] } and defined $chars[$i+1] ) {
+					$ret .= $htmlcolors{ $chars[$i] };
+					$incolor = 1;
+				} else {
+					warn "unknown AC color code: $chars[$i]";
+				}
+				$found = 0;
+			} elsif ( ord( $chars[$i] ) == 12 ) {
+				if ( $incolor ) {
+					$ret .= '</font>';
+					$incolor = 0;
+				}
+				$found = 1;
+			} else {
+				$ret .= $chars[$i];
+			}
+		}
+		if ( $found ) {
+			$ret .= '</font>';
+		}
+
+		return $ret;
+	}
 }
 
 sub parse_pingresponse {
@@ -512,6 +634,9 @@ sub parse_pingresponse {
 
 1;
 __END__
+
+=for stopwords todo
+
 =head1 NAME
 
 Games::AssaultCube::Utils - Various utilities for the AssaultCube modules

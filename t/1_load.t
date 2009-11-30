@@ -3,7 +3,7 @@ use strict; use warnings;
 
 my $numtests;
 BEGIN {
-	$numtests = 8 + 40;
+	$numtests = 9 + 40;
 
 	eval "use Test::NoWarnings";
 	if ( ! $@ ) {
@@ -22,7 +22,8 @@ use_ok( 'Games::AssaultCube::ServerQuery::Response' );
 use_ok( 'Games::AssaultCube::ServerQuery' );
 use_ok( 'Games::AssaultCube::MasterserverQuery::Response' );
 use_ok( 'Games::AssaultCube::MasterserverQuery' );
-use_ok( 'Games::AssaultCube::Log::Line' );
+use_ok( 'POE::Component::AssaultCube::ServerQuery::Server' );
+use_ok( 'POE::Component::AssaultCube::ServerQuery' );
 
 foreach my $event ( qw(	AdminPasswords      DemoStop          Killed
 			AutoBalance         DNSLookup         LoadedMap

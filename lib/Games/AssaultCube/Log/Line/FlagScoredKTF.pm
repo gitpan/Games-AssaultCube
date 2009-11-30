@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::FlagStole';
 
@@ -24,11 +24,24 @@ has 'score' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return $self->nick . " scored the flag in KTF, carried it for " . $self->carried . " for a score of " . $self->score;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords KTF ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::FlagScoredKTF - Describes the FlagScoredKTF event in a log line

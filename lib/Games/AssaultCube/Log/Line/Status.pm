@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -36,11 +36,24 @@ has 'recv' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Status: " . $self->players . " players, sent " . $self->sent . " bytes, recv " . $self->recv . " bytes at " . $self->datetime->datetime;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords datetime kbytes sec
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Status - Describes the Status event in a log line
@@ -71,11 +84,11 @@ The number of connected players
 
 =head3 sent
 
-The number of bytes sent since the last status line ( float )
+The number of Kbytes sent per sec ( float )
 
 =head3 recv
 
-The number of bytes recv since the last status line ( float )
+The number of Kbytes sent per sec ( float )
 
 =head1 AUTHOR
 

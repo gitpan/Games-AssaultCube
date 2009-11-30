@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -39,6 +39,18 @@ has 'flags' => (
 	is		=> 'ro',
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+
+		# we want nicely-formatted output
+		return sprintf( "Client status of %25s (%4s): %3d frags, %3d deaths%s", $self->nick, $self->team_name, $self->frags, $self->deaths, ( defined $self->flags ? sprintf( ", %d flags", $self->flags ) : "" ) );
+	},
+);
+
 # TODO Moose can't export multiple roles into this class unless it defines BUILD...
 # Error:  'Games::AssaultCube::Log::Line::Base::Mastermode|Games::AssaultCube::Log::Line::Base::Gamemode' requires the method 'BUILD' to be implemented by 'Games::AssaultCube::Log::Line::GameStatus' at /usr/local/share/perl/5.10.0/Moose/Meta/Role/Application.pm line 59
 sub BUILD {
@@ -50,6 +62,9 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords CLA RVSF ADMIN cn frags gamemode ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::ClientStatus - Describes the ClientStatus event in a log line

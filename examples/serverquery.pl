@@ -14,6 +14,7 @@ if ( defined $ARGV[0] ) {
 	if ( defined $response ) {
 		print "Server '" . $response->desc_nocolor . "' is running with " . $response->players . " players on map " .
 		$response->map . " on mode(" . $response->gamemode_name . ")\n";
+		print "datagram length: " . length( $response->datagram ) . "\n";
 	} else {
 		print "Server is not responding!\n";
 	}

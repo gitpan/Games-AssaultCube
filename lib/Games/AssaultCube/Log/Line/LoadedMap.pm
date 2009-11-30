@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -36,11 +36,23 @@ has 'cfgzsize' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Loaded map " . $self->map . " (" . $self->mapsize . " bytes)";
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords cfg cfgsize cfgzsize mapsize
 =head1 NAME
 
 Games::AssaultCube::Log::Line::LoadedMap - Describes the LoadedMap event in a log line

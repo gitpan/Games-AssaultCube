@@ -6,18 +6,31 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
 with	'Games::AssaultCube::Log::Line::Base::RoleInfo',
 	'Games::AssaultCube::Log::Line::Base::NickIP';
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return $self->nick . " from " . $self->ip . " changed role to " . $self->role_name;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords admin ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::ClientChangeRole - Describes the ClientChangeRole event in a log line

@@ -4,7 +4,7 @@ use Moose::Role;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 has 'ip' => (
 	isa		=> 'Str',
@@ -20,6 +20,9 @@ has 'nick' => (
 
 1;
 __END__
+
+=for stopwords ip
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::Base::NickIP - The NickIP role for subclasses

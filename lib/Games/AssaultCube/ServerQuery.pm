@@ -4,13 +4,14 @@ package Games::AssaultCube::ServerQuery;
 # import the Moose stuff
 use Moose;
 use MooseX::StrictConstructor;
+use Moose::Util::TypeConstraints;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # get some utility stuff
-use Games::AssaultCube::Utils qw( default_port tostr );
+use Games::AssaultCube::Utils qw( default_port tostr get_ac_pingport );
 use Games::AssaultCube::ServerQuery::Response;
 use IO::Socket::INET;
 
@@ -21,19 +22,23 @@ has 'server' => (
 	required	=> 1,
 );
 
-# TODO try to use a proper Moose::Type subclass for ports...
-has 'port' => (
-	isa		=> 'Int',
-	is		=> 'rw',
-	default		=> default_port(),
-	where		=> sub {
+# <mst> Apocalypse: { my $port_spec = subtype as Int => where { ... }; has 'attr' => (isa => $port_spec, ...); }
+{
+	my $port_type = subtype as 'Int' => where {
 		if ( $_ <= 0 or $_ > 65535 ) {
 			return 0;
 		} else {
 			return 1;
 		}
-	},
-);
+	};
+
+	has 'port' => (
+		isa		=> $port_type,
+	#	isa		=> 'Int',
+		is		=> 'rw',
+		default		=> default_port(),
+	);
+}
 
 has 'timeout' => (
 	isa		=> 'Int',
@@ -68,7 +73,7 @@ sub run {
 	# Ok, get our socket and send off the PING!
 	my $sock = IO::Socket::INET->new(
 		Proto		=> 'udp',
-		PeerPort	=> $self->port + 1,
+		PeerPort	=> get_ac_pingport( $self->port ),
 		PeerAddr	=> $self->server,
 	) or die "Could not create socket: $!";
 	binmode $sock, ":utf8" or die "Unable to set binmode: $!";
@@ -115,6 +120,9 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords PxL playerlist PHP hostname ip
+
 =head1 NAME
 
 Games::AssaultCube::ServerQuery - Queries a running AssaultCube server for information
@@ -177,7 +185,7 @@ work around it.
 
 Currently, there is only one method: run(). You call this and get the response object back. For more
 information please look at the L<Games::AssaultCube::ServerQuery::Response> class. You can call run() as
-many times as you want, no need to re-instantitate the object for each query.
+many times as you want, no need to re-instantiate the object for each query.
 
 WARNING: run() will die() if errors happen. For sanity, you should wrap it in an eval.
 

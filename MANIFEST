@@ -55,6 +55,9 @@ lib/Games/AssaultCube/Log/Line/MapError.pm
 lib/Games/AssaultCube/Log/Line/AutoBalance.pm
 lib/Games/AssaultCube/Log/Line/ConfigError.pm
 
+lib/POE/Component/AssaultCube/ServerQuery.pm
+lib/POE/Component/AssaultCube/ServerQuery/Server.pm
+
 META.yml
 Changes
 Makefile.PL
@@ -64,6 +67,8 @@ examples/serverquery.pl
 examples/masterserverquery.pl
 examples/samplelogline.pl
 examples/fancylogparser.pl
+examples/poepinger.pl
+examples/poepinger_masterserver.pl
 
 t/1_load.t
 t/apocalypse.t

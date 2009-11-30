@@ -6,7 +6,7 @@ use Moose;
 
 # Initialize our version
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 extends 'Games::AssaultCube::Log::Line::Base';
 
@@ -32,11 +32,24 @@ has 'size' => (
 	required	=> 1,
 );
 
+has 'tostr' => (
+	isa		=> 'Str',
+	is		=> 'ro',
+	lazy		=> 1,
+	default		=> sub {
+		my $self = shift;
+		return "Stopped recording demo: " . $self->size . " bytes, map " . $self->map . ", gamemode " . $self->gamemode_fullname . " at " . $self->datetime->datetime;
+	},
+);
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=for stopwords CTF TDM gamemode datetime
+
 =head1 NAME
 
 Games::AssaultCube::Log::Line::DemoStop - Describes the DemoStop event in a log line
